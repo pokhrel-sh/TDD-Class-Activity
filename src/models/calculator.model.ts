@@ -6,20 +6,63 @@ import { ICalculatorModel } from '../interfaces/calculator-model.interface';
 
 export class CalculatorModel implements ICalculatorModel {
 
+  private _buffer: string = '';
+
   public pressNumericKey(key: NumericKeys): void {
-    throw new Error('Method not implemented.');
+    this._buffer += key;
   }
 
   public pressOperatorKey(key: OperatorKeys): void {
-    throw new Error('Method not implemented.');
+    this._buffer += " " + key + " ";
   }
 
   public pressActionKey(key: ActionKeys): void {
-    throw new Error('Method not implemented.');
+    this._buffer += key;
   }
 
   public display(): string {
-    throw new Error('Method not implemented.');
-  }
+    if (this._buffer.includes('=')) {
+      let splitted: string[] = this._buffer.split(" ")
+      let rolling_total: number = 0;
+      let queued_operation: string = "";
+      for (let i = 0; i < splitted.length; i++) {
+        if (splitted[i] == "+") {
+          queued_operation = "+";
+        } 
+        else if (splitted[i] == "-") {
+          queued_operation = "-";
+        }
+        else if (splitted[i] == "/") {
+          queued_operation = "/";
+        }
+        else if (splitted[i] == "*") {
+          queued_operation = "*";
+        } 
+        else if (splitted[i] == "=") {
+          break;
+        }
+        else {
+          if (queued_operation == "+") {
+            rolling_total = rolling_total;
+          } 
+          else if (queued_operation == "-") {
+            rolling_total = rolling_total;
+          }
+          else if (queued_operation == "/") {
+            rolling_total = rolling_total;
+          }
+          else if (queued_operation == "*") {
+            rolling_total = rolling_total;
+          }
+          else if (queued_operation == "") {
+            rolling_total = Number(splitted[i])
+          }
+          queued_operation = "";
+        }
+      }
+      return String(rolling_total);
+    }
 
+    return this._buffer.replace(/\s/g, "");
+  } 
 }
